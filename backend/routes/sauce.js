@@ -18,7 +18,7 @@ router.put('/:id', auth, multer, stuffCtrl.modifySauce);
 router.delete('/:id', auth, stuffCtrl.deleteSauce);
 /******************Quatrieme middleware*******GET:id*************************/
 router.get('/:id', auth, stuffCtrl.getOneSauce);
-/*******************Cinquieme Middleware***********************************/
+/*******************Cinquieme Middleware**********POST*************************/
 router.post('/:id/like',auth, stuffCtrl.likeSauce);
 /*******************Sixiéme middleware************GET*******************/
 router.get('/', auth, stuffCtrl.getAllSauces);
