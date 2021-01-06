@@ -4,9 +4,23 @@
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+const MaskData = require('maskdata');
 // importation du modèle utilisateur
 const User = require('../models/User');
+
+//masquage e-mail
+const emailMask2Options = {
+    maskWith: "*", 
+    unmaskedStartCharactersBeforeAt: 3,
+    unmaskedEndCharactersAfterAt: 2,
+    maskAtTheRate: false
+};
+ 
+const email = "my.test.email@testEmail.com";
+ 
+const maskedEmail = MaskData.maskEmail2(email, emailMask2Options);
+ 
+//Output: my.********@**********om
 
 // exportation de la fonction qui va enregistrer un nouvel utilisateur
 exports.signup =(req,res,next) => {

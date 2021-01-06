@@ -20,11 +20,11 @@ exports.createSauce = (req, res, next) => {
 };
 /***************** exportation de la fonction qui va modifier une sauce (gère la route PUT)************************/
 exports.modifySauce = (req, res, next) =>{
-  const sauceObject = req.file ?
-  {
-    ...JSON.parse(req.body.sauce),
-    imageURL:`${req.protocol}://${req.get('host')}/images/${req.file.filemane}`
-    } : { ...req.body};
+ const sauceObject = req.file ?
+    {
+      ...JSON.parse(req.body.sauce),
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } : { ...req.body };
   Sauce.updateOne({ _id: req.params.id},{...sauceObject, _id: req.params.id})
   .then(()=> res.status (200).json({ message:'modifié'}))
   .catch(error => res.status(400).json({error}))

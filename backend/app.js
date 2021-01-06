@@ -5,13 +5,17 @@ const express=require('express');
 const bodyParser=require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
+const MaskData = require('maskdata');
+const helmet = require("helmet");
+require('dotenv').config();
 
 // importation des routeurs sauce et utilisateur
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
 // connexion au cluster MongoDB - masquage des données de connexion
-mongoose.connect("mongodb+srv://aurelie:Catalina19@cluster0.ciwot.mongodb.net/sauces?retryWrites=true&w=majority",
+mongoose.connect
+('mongodb+srv://'+ process.env.DB_USER +':' + process.env.DB_PASSWORD +'@cluster0.ciwot.mongodb.net/sauces?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -19,6 +23,24 @@ mongoose.connect("mongodb+srv://aurelie:Catalina19@cluster0.ciwot.mongodb.net/sa
 
 // création de l'application express
 const app=express();
+
+const rateLimit = require("express-rate-limit");
+
+// Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+// see https://expressjs.com/en/guide/behind-proxies.html
+// app.set('trust proxy', 1);
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+
+//  apply to all requests
+app.use(limiter);
+
+//helmet securité
+app.use(helmet());
+
 /*middleware*/
 
 // ajout de headers pour toutes les requêtes afin d'autoriser n'importe quel utilisateur à accéder à l'application
@@ -41,4 +63,4 @@ app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
 
 module.exports = app;
-module.exports=app;
+
